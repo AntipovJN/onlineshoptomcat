@@ -24,7 +24,7 @@ public class SignInServlet extends HttpServlet {
         String password = req.getParameter("password");
         User user = userService.getByEmail(email);
         if (Objects.isNull(user) || !user.getPassword().equals(password)) {
-            req.setAttribute("error", "error");
+            req.setAttribute("error", "Incorrect login or password");
             req.getRequestDispatcher("index.jsp").forward(req, resp);
         } else {
             req.getSession().setAttribute("user", user);
