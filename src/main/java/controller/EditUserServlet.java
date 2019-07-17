@@ -25,7 +25,6 @@ public class EditUserServlet extends HttpServlet {
         req.setAttribute("id", id);
         req.setAttribute("email", user.getEmail());
         req.getRequestDispatcher("/edit_user.jsp").forward(req, resp);
-
     }
 
     @Override

@@ -1,7 +1,6 @@
 package controller;
 
 import factory.UserServiceFactory;
-import model.User;
 import service.UserService;
 
 import javax.security.auth.login.LoginException;

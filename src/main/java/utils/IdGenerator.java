@@ -8,6 +8,7 @@ public class IdGenerator {
     public static long getUserID() {
         return userID++;
     }
+    
     public static long getItemId() {
         return itemId++;
     }

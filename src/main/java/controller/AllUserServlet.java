@@ -3,7 +3,6 @@ package controller;
 import model.User;
 import service.UserService;
 import service.impl.UserServiceImpl;
-import utils.IdGenerator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

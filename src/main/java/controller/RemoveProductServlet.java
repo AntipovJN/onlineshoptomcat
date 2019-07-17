@@ -16,7 +16,8 @@ public class RemoveProductServlet extends HttpServlet {
     private static final ProductService productService = ProductServiceFactory.getInstance();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         long id = Long.valueOf(req.getParameter("id"));
         productService.removeProduct(id);
         resp.sendRedirect("/products");

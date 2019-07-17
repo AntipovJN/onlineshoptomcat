@@ -14,7 +14,8 @@ public class RemoveUserServlet extends HttpServlet {
 
     private static final UserService userService = UserServiceFactory.getInstance();
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
         long id = Long.valueOf(req.getParameter("id"));
         userService.removeUser(id);
         resp.sendRedirect("/users");
