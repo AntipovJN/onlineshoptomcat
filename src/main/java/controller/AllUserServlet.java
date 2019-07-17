@@ -3,6 +3,7 @@ package controller;
 import model.User;
 import service.UserService;
 import service.impl.UserServiceImpl;
+import utils.IdGenerator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,11 +24,5 @@ public class AllUserServlet extends HttpServlet {
         List<User> allUsers = userService.getAll();
         req.setAttribute("allUsers", allUsers);
         req.getRequestDispatcher("users.jsp").forward(req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        doGet(req, resp);
     }
 }

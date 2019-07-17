@@ -1,10 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Eugene
-  Date: 16.07.2019
-  Time: 21:46
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="java.util.Objects" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -13,20 +7,17 @@
 <body>
 
 <center>
-
     <h4>
-        <%
-            String error = (String) request.getAttribute("error");
-            if (error != null) {
-                response.getWriter().write(error);
-            }
-        %>
+        <%=!Objects.isNull(request.getAttribute("error")) ? request.getAttribute("error") : ""%>
     </h4>
-
-    <form action="add_product" method="post">
-        Email <input name="name" type="text"/> <br>
-        Password <input name="description" type="text"> <br>
-        Repeat password <input name="price" type="number"> <br>
+    <form action="/products/add" method="post">
+        Name <input name="name" type="text"
+                    value="<%=Objects.isNull(request.getAttribute("name"))? "" :
+                     request.getAttribute("name")%>"/> <br>
+        Description <input name="description" type="text"
+                           value="<%=Objects.isNull(request.getAttribute("description"))? "" :
+                            request.getAttribute("description")%>"> <br>
+        Price <input name="price" type="number"> <br>
         <button type="submit">Register</button>
     </form>
 </center>

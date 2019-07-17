@@ -13,12 +13,6 @@
     <title>All products</title>
 </head>
 <body>
-<a href="/users">
-    <button>Все пользователи</button>
-</a>
-<a href="/add_product">
-    <button>Добавить товар</button>
-</a>
 <%
     PrintWriter printWriter = response.getWriter();
     printWriter.write("<center>");
@@ -28,20 +22,26 @@
             "        <th>Наименование</th>\n" +
             "        <th>Описание</th>\n" +
             "        <th>Цена</th>\n" +
+            "        <th>Edit</th>" +
+            "        <th>Remove</th>" +
             "    </tr>");
 
     List<Product> allUsers = (List<Product>) request.getAttribute("allProducts");
-    for (Product item : allUsers) {
+    for (Product product : allUsers) {
         printWriter.write("<tr>");
-        printWriter.write("<td>" + item.getName() + "</td>");
-        printWriter.write("<td>" + item.getDescription() + "</td>");
-        printWriter.write("<td>" + item.getPrice() + "</td>");
+        printWriter.write("<td>" + product.getName() + "</td>");
+        printWriter.write("<td>" + product.getDescription() + "</td>");
+        printWriter.write("<td>" + product.getPrice() + "</td>");
+        printWriter.write("<td> <a href='/products/edit?id=" + product.getId() + "'>");
+        printWriter.write("Edit </a></td>");
+        printWriter.write("<td> <a href='/products/remove?id=" + product.getId() + "'>");
+        printWriter.write("Remove </a></td>");
         printWriter.write("</tr>");
     }
     printWriter.write("<a href=\"/users\">\n" +
             "    <button>Все пользователи</button>\n" +
             "</a>\n" +
-            "<a href=\"/add_product\">\n" +
+            "<a href=\"/products/add\">\n" +
             "    <button>Добавить товар</button>\n" +
             "</a>");
     printWriter.write("</center>");
