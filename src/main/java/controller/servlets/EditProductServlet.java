@@ -1,4 +1,4 @@
-package controller;
+package controller.servlets;
 
 import factory.ProductServiceFactory;
 import model.Product;

@@ -1,4 +1,4 @@
-package controller;
+package controller.servlets;
 
 import model.User;
 import service.UserService;

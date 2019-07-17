@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserService {
 
-    void addUser(String email, String password, String passwordAgain) throws LoginException;
+    void addUser(String email, String password, String passwordAgain, String role) throws LoginException;
 
     List<User> getAll();
 

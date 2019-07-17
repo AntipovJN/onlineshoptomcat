@@ -15,13 +15,13 @@ public class UserServiceImpl implements UserService {
     private static final UserDao userDao = UserDaoFactory.getInstance();
 
     @Override
-    public void addUser(String email, String password, String passwordAgain)
+    public void addUser(String email, String password, String passwordAgain, String role)
             throws IllegalArgumentException, LoginException {
         validateUserData(email, password, passwordAgain);
         if (!Objects.isNull(getByEmail(email))) {
             throw new LoginException("Try another login");
         }
-        userDao.addUser(new User(IdGenerator.getUserID(), email, password));
+        userDao.addUser(new User(IdGenerator.getUserID(), email, password, role));
     }
 
     @Override
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
         if (!Objects.isNull(userDao.getByEmail(newEmail)) && !userDao.getByEmail(newEmail).getId().equals(id)) {
             throw new LoginException("Use another email");
         }
-        userDao.updateUser(new User(id, newEmail, newPassword));
+        userDao.updateUser(new User(id, newEmail, newPassword, userDao.getById(id).getRole()));
     }
 
     @Override
