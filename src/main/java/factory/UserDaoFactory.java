@@ -12,7 +12,8 @@ public class UserDaoFactory {
     public static synchronized UserDao getInstance() {
         if (instance == null) {
             instance = new UserDaoImpl();
-            instance.addUser(new User(IdGenerator.getUserID(), "admin@a", "admin"));
+            instance.addUser(new User(IdGenerator.getUserID(), "admin@a", "admin", "admin"));
+                instance.addUser(new User(IdGenerator.getUserID(), "user@a", "user", "user"));
         }
         return instance;
     }
