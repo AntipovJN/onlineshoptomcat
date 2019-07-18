@@ -13,7 +13,7 @@ public class UserDaoFactory {
         if (instance == null) {
             instance = new UserDaoImpl();
             instance.addUser(new User(IdGenerator.getUserID(), "admin@a", "admin", "admin"));
-                instance.addUser(new User(IdGenerator.getUserID(), "user@a", "user", "user"));
+                instance.addUser(new User(IdGenerator.getUserID(), "antipov.jn@gmail.com", "aaa", "user"));
         }
         return instance;
     }

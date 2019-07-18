@@ -5,6 +5,9 @@
     <title>All users</title>
 </head>
 <body>
+<a href="/exit">
+    <button>End Session</button>
+</a>
 <center>
     <h2> Список пользователей </h2>
     <table border="1">
