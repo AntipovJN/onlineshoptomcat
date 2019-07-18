@@ -13,6 +13,11 @@ public class Product {
         this.description = descriptional;
         this.price = price;
     }
+    public Product (String name, String descriptional, double price) {
+        this.name = name;
+        this.description = descriptional;
+        this.price = price;
+    }
 
     public Long getId() {
         return id;

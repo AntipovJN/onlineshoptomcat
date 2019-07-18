@@ -1,6 +1,7 @@
 package controller.servlets;
 
 import factory.OrderServiceFactory;
+import model.Code;
 import model.User;
 import service.OrderService;
 import utils.IdGenerator;
@@ -28,9 +29,10 @@ public class AddOrderServlet extends HttpServlet {
             throws ServletException, IOException {
         String address = req.getParameter("address");
         String payment = req.getParameter("payment");
-        long id = IdGenerator.getOrderID();
-        orderService.addOrder(id, address, payment, ((User) req.getSession().getAttribute("user")),
+        Code code = orderService.addOrder(address, payment,
+                ((User) req.getSession().getAttribute("user")),
                 req.getSession().getAttribute("basket").toString());
+        Long id = orderService.getByCode(code).getId();
         req.getSession().setAttribute("orderId", id);
         resp.sendRedirect("/confirm");
     }

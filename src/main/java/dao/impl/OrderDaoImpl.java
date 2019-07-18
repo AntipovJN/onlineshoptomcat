@@ -1,6 +1,7 @@
 package dao.impl;
 
 import dao.OrderDao;
+import model.Code;
 import model.Order;
 import service.Database;
 
@@ -17,6 +18,16 @@ public class OrderDaoImpl implements OrderDao {
     public Order getById(long id) {
         for (Order order : Database.ORDERS) {
             if (order.getId() == id) {
+                return order;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Order getByCode(Code code) {
+        for (Order order : Database.ORDERS) {
+            if (order.getCode().equals(code)) {
                 return order;
             }
         }

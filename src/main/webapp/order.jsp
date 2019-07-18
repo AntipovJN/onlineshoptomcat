@@ -20,7 +20,7 @@
             </tr>
             <tr>
                 <td>Choose payment method</td>
-                <td><input type="radio" name="payment" value="card">Card</td>
+                <td><input type="radio" name="payment" value="card" checked>Card</td>
             </tr>
             <tr>
                 <td></td>
