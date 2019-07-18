@@ -9,14 +9,13 @@
 <%--register - это путь относительного того где мы сейчас - т.е. где мы сейчас + эта строка--%>
 
 <center>
-Welcome! You must sign in :p
-   ${error}
-<form action="/login" method="post">
-    <input type="email" name="email"/>
-    <input type="password" name="password"/>
-    <input type="submit" value="Sign In">
-</form>
+    Welcome! You must sign in or <a href="/register">register</a> :p
+    ${error}
+    <form action="/login" method="post">
+        <input type="email" name="email"/>
+        <input type="password" name="password"/>
+        <input type="submit" value="Sign In">
+    </form>
 </center>
-
 </body>
 </html>
