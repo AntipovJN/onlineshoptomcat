@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class UserDaoJDBC implements UserDao {
 
@@ -49,37 +50,37 @@ public class UserDaoJDBC implements UserDao {
     }
 
     @Override
-    public User getByEmail(String email) {
+    public Optional<User> getByEmail(String email) {
         try (Connection connection = ConnectionJDBC.getConnection()) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(
                     String.format("SELECT * FROM users_test WHERE email='%s'", email));
             resultSet.next();
-            return new User(resultSet.getLong("id"),
+            return Optional.of(new User(resultSet.getLong("id"),
                     resultSet.getString("email"),
                     resultSet.getString("password"),
-                    resultSet.getString("role"));
+                    resultSet.getString("role")));
         } catch (SQLException e) {
             logger.error(String.format("Failed getting user with email = '%s'", email), e);
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
-    public User getById(Long id) {
+    public Optional<User> getById(Long id) {
         try (Connection connection = ConnectionJDBC.getConnection()) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(
                     String.format("SELECT * FROM users_test WHERE id='%s'", id));
             resultSet.next();
-            return new User(resultSet.getLong("id"),
+            return Optional.of(new User(resultSet.getLong("id"),
                     resultSet.getString("email"),
                     resultSet.getString("password"),
-                    resultSet.getString("role"));
+                    resultSet.getString("role")));
         } catch (SQLException e) {
             logger.error(String.format("Failed getting user with id = '%s'", id), e);
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override

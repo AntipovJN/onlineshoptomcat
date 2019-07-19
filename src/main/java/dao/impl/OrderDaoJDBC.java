@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class OrderDaoJDBC implements OrderDao {
 
@@ -33,42 +34,42 @@ public class OrderDaoJDBC implements OrderDao {
     }
 
     @Override
-    public Order getById(long id) {
+    public Optional<Order> getById(long id) {
         try (Connection connection = ConnectionJDBC.getConnection()) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(
                     String.format("SELECT * FROM order_test WHERE id='%s'", id));
             resultSet.next();
-            return new Order(resultSet.getLong("id"),
+            return Optional.of(new Order(resultSet.getLong("id"),
                     resultSet.getString("address"),
                     resultSet.getString("payment"),
                     new Code(Integer.valueOf(resultSet.getString("code")),
                             resultSet.getLong("userid")),
-                    resultSet.getString("products"));
+                    resultSet.getString("products")));
         } catch (SQLException e) {
             logger.error(String.format("Failed getting order with id='%s'", id), e);
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
-    public Order getByCode(Code code) {
+    public Optional<Order> getByCode(Code code) {
         try (Connection connection = ConnectionJDBC.getConnection()) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(
                     String.format("SELECT * FROM order_test WHERE code='%s' AND userid='%s'"
                             , code.getCode(), code.getUserId()));
             resultSet.next();
-            return new Order(resultSet.getLong("id"),
+            return Optional.of(new Order(resultSet.getLong("id"),
                     resultSet.getString("address"),
                     resultSet.getString("payment"),
                     new Code(Integer.valueOf(resultSet.getString("code")),
                             resultSet.getLong("userid")),
-                    resultSet.getString("products"));
+                    resultSet.getString("products")));
         } catch (SQLException e) {
             logger.error(String.format("Failed getting order where userid='%s'", code.getUserId()), e);
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override

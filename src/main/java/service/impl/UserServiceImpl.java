@@ -3,6 +3,7 @@ package service.impl;
 import dao.UserDao;
 import factory.UserDaoFactory;
 import model.User;
+import org.apache.log4j.Logger;
 import service.UserService;
 import utils.IdGenerator;
 
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class UserServiceImpl implements UserService {
+
+    private static final Logger log = Logger.getLogger(UserServiceImpl.class);
 
     private static final UserDao userDao = UserDaoFactory.getInstance();
 
@@ -31,27 +34,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getByEmail(String email) {
-        return userDao.getByEmail(email);
+        return userDao.getByEmail(email).isPresent() ? userDao.getByEmail(email).get() : null;
     }
 
     @Override
     public User getById(Long id) {
-        return userDao.getById(id);
+        return userDao.getById(id).isPresent() ? userDao.getById(id).get() : null;
     }
 
     @Override
     public void updateUser(Long id, String newEmail, String newPassword, String newPasswordAgain)
             throws IllegalArgumentException, LoginException {
         validateUserData(newEmail, newPassword, newPasswordAgain);
-        if (!Objects.isNull(userDao.getByEmail(newEmail)) && !userDao.getByEmail(newEmail).getId().equals(id)) {
+        if (!userDao.getByEmail(newEmail).isPresent() && !userDao.getByEmail(newEmail).get().getId().equals(id)) {
+            log.error(String.format("Failed update user with id ='%s'", id));
             throw new LoginException("Use another email");
         }
-        userDao.updateUser(new User(id, newEmail, newPassword, userDao.getById(id).getRole()));
+        userDao.updateUser(new User(id, newEmail, newPassword, userDao.getById(id).get().getRole()));
     }
 
     @Override
     public void removeUser(Long id) {
-        userDao.removeUser(userDao.getById(id));
+        if (userDao.getById(id).isPresent()) {
+            userDao.removeUser(userDao.getById(id).get());
+        } else
+            log.error(String.format("Failed removing user with id ='%s'", id));
     }
 
     private void validateUserData(String email, String password, String passwordAgain)

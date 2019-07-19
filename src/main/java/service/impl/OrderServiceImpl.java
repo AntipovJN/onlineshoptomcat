@@ -5,11 +5,14 @@ import factory.OrderDaoFactory;
 import model.Code;
 import model.Order;
 import model.User;
+import org.apache.log4j.Logger;
 import service.OrderService;
 
 import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
+
+    private Logger logger = Logger.getLogger(OrderServiceImpl.class);
 
     private static final OrderDao orderDao = OrderDaoFactory.getInstance();
 
@@ -23,12 +26,21 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getById(long id) {
-        return orderDao.getById(id);
+        if (orderDao.getById(id).isPresent()) {
+            return orderDao.getById(id).get();
+        }
+        logger.error(String.format("Order with id = '%d' is not exist", id));
+        return null;
     }
 
     @Override
     public Order getByCode(Code code) {
-        return orderDao.getByCode(code);
+        if (orderDao.getByCode(code).isPresent()) {
+            return orderDao.getByCode(code).get();
+        }
+        logger.error(String.format("Order with userID = '%s' and code = '%d' is not exist",
+                code.getUserId(), code.getCode()));
+        return null;
     }
 
     @Override

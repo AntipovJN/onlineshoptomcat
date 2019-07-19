@@ -3,6 +3,7 @@ package dao;
 import model.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductDao {
 
@@ -10,7 +11,7 @@ public interface ProductDao {
 
     void addProduct(Product item);
 
-    Product getById(long id);
+    Optional<Product> getById(long id);
 
     void updateProduct(Product product);
 
