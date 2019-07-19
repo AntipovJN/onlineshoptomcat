@@ -5,42 +5,34 @@ import factory.OrderDaoFactory;
 import model.Code;
 import model.Order;
 import model.User;
-import org.apache.log4j.Logger;
 import service.OrderService;
+import utils.CodeGenerator;
 
 import java.util.List;
+import java.util.Optional;
 
 public class OrderServiceImpl implements OrderService {
 
-    private Logger logger = Logger.getLogger(OrderServiceImpl.class);
 
     private static final OrderDao orderDao = OrderDaoFactory.getInstance();
 
     @Override
     public Code addOrder(String address, String payment, User user, String basket) {
-        Code code = new Code((int) (Math.random() * 10000), user.getId());
+        Code code = new Code(CodeGenerator.generateCode(), user.getId());
         Order order = new Order(address, payment, code, basket);
         orderDao.addOrder(order);
         return code;
     }
 
     @Override
-    public Order getById(long id) {
-        if (orderDao.getById(id).isPresent()) {
-            return orderDao.getById(id).get();
-        }
-        logger.error(String.format("Order with id = '%d' is not exist", id));
-        return null;
+    public Optional<Order> getById(long id) {
+        return orderDao.getById(id);
+
     }
 
     @Override
-    public Order getByCode(Code code) {
-        if (orderDao.getByCode(code).isPresent()) {
-            return orderDao.getByCode(code).get();
-        }
-        logger.error(String.format("Order with userID = '%s' and code = '%d' is not exist",
-                code.getUserId(), code.getCode()));
-        return null;
+    public Optional<Order> getByCode(Code code) {
+        return orderDao.getByCode(code);
     }
 
     @Override

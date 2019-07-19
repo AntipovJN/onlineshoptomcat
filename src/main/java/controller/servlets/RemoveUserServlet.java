@@ -13,6 +13,7 @@ import java.io.IOException;
 public class RemoveUserServlet extends HttpServlet {
 
     private static final UserService userService = UserServiceFactory.getInstance();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
 
-@WebFilter(value = {"/confirm", "/order"})
+@WebFilter(value = {"/confirmOrder", "/order"})
 public class OrderFilter implements Filter {
 
     @Override
@@ -24,8 +24,8 @@ public class OrderFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        if (Objects.isNull(request.getSession().getAttribute("basket")) ||
-                request.getSession().getAttribute("basket").toString().isEmpty()) {
+        if (Objects.isNull(request.getSession().getAttribute("basket"))
+                || request.getSession().getAttribute("basket").toString().isEmpty()) {
             response.sendRedirect("/products");
         } else {
             filterChain.doFilter(request, response);

@@ -5,14 +5,15 @@ import model.Order;
 import model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderService {
 
     Code addOrder(String address, String payment, User user, String basket);
 
-    Order getById(long id);
+    Optional<Order> getById(long id);
 
-    Order getByCode(Code code);
+    Optional<Order> getByCode(Code code);
 
     List<Order> getAll();
 

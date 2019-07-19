@@ -5,6 +5,7 @@ import model.Product;
 import service.Database;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ProductDaoImpl implements ProductDao {
 
@@ -19,13 +20,13 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public Product getById(long id) {
+    public Optional<Product> getById(long id) {
         for (Product product : Database.PRODUCTS) {
             if (product.getId().equals(id)) {
-                return product;
+                return Optional.of(product);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override

@@ -9,6 +9,7 @@ import utils.IdGenerator;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class ProductServiceImpl implements ProductService {
 
@@ -29,12 +30,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getById(Long id) {
-        if (productDao.getById(id).isPresent()) {
-            return productDao.getById(id).get();
-        }
-        log.error(String.format("Product with id = '%s' is not exist", id));
-        return null;
+    public Optional<Product> getById(Long id) {
+            return productDao.getById(id);
     }
 
     @Override

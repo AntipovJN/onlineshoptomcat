@@ -4,6 +4,7 @@ import model.User;
 
 import javax.security.auth.login.LoginException;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -11,9 +12,9 @@ public interface UserService {
 
     List<User> getAll();
 
-    User getByEmail(String email);
+    Optional<User> getByEmail(String email);
 
-    User getById(Long id);
+    Optional<User> getById(Long id);
 
     void updateUser(Long id, String email, String password, String passwordAgain) throws LoginException;
 

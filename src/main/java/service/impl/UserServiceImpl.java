@@ -10,6 +10,7 @@ import utils.IdGenerator;
 import javax.security.auth.login.LoginException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
 
@@ -21,7 +22,7 @@ public class UserServiceImpl implements UserService {
     public void addUser(String email, String password, String passwordAgain, String role)
             throws IllegalArgumentException, LoginException {
         validateUserData(email, password, passwordAgain);
-        if (!Objects.isNull(getByEmail(email))) {
+        if ((getByEmail(email).isPresent())) {
             throw new LoginException("Try another login");
         }
         userDao.addUser(new User(IdGenerator.getUserID(), email, password, role));
@@ -33,13 +34,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getByEmail(String email) {
-        return userDao.getByEmail(email).isPresent() ? userDao.getByEmail(email).get() : null;
+    public Optional<User> getByEmail(String email) {
+        return userDao.getByEmail(email);
     }
 
     @Override
-    public User getById(Long id) {
-        return userDao.getById(id).isPresent() ? userDao.getById(id).get() : null;
+    public Optional<User> getById(Long id) {
+        return userDao.getById(id);
     }
 
     @Override

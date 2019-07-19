@@ -21,10 +21,14 @@ public class EditUserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         long id = Long.valueOf(req.getParameter("id"));
-        User user = userService.getById(id);
-        req.setAttribute("id", id);
-        req.setAttribute("email", user.getEmail());
-        req.getRequestDispatcher("/edit_user.jsp").forward(req, resp);
+        if (userService.getById(id).isPresent()) {
+            User user = userService.getById(id).get();
+            req.setAttribute("id", id);
+            req.setAttribute("email", user.getEmail());
+            req.getRequestDispatcher("/edit_user.jsp").forward(req, resp);
+        } else {
+            resp.sendRedirect("/users");
+        }
     }
 
     @Override

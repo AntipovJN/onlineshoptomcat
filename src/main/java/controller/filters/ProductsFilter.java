@@ -14,6 +14,7 @@ import java.util.Objects;
 
 @WebFilter(value = {"/products/buy"})
 public class ProductsFilter implements Filter {
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
