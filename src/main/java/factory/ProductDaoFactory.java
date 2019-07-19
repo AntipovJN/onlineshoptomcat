@@ -1,9 +1,7 @@
 package factory;
 
 import dao.ProductDao;
-import dao.impl.ProductDaoImpl;
-import model.Product;
-import utils.IdGenerator;
+import dao.impl.ProductDaoJDBC;
 
 public class ProductDaoFactory {
 
@@ -11,8 +9,7 @@ public class ProductDaoFactory {
 
     public static synchronized ProductDao getInstance() {
         if (instance == null) {
-            instance = new ProductDaoImpl();
-            instance.addProduct(new Product(IdGenerator.getItemId(), "initial product", "intitial product", 100.2));
+            instance = new ProductDaoJDBC();
         }
         return instance;
     }

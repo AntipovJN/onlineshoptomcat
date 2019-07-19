@@ -6,23 +6,33 @@ import model.Code;
 import model.Order;
 import model.User;
 import service.OrderService;
+import utils.CodeGenerator;
 
 import java.util.List;
+import java.util.Optional;
 
 public class OrderServiceImpl implements OrderService {
+
 
     private static final OrderDao orderDao = OrderDaoFactory.getInstance();
 
     @Override
-    public void addOrder(long id, String address, String payment, User user, String basket) {
-        Code code = new Code((int) (Math.random() * 10000), user.getId());
-        Order order = new Order(id, address, payment, code, basket);
+    public Code addOrder(String address, String payment, User user, String basket) {
+        Code code = new Code(CodeGenerator.generateCode(), user.getId());
+        Order order = new Order(address, payment, code, basket);
         orderDao.addOrder(order);
+        return code;
     }
 
     @Override
-    public Order getById(long id) {
+    public Optional<Order> getById(long id) {
         return orderDao.getById(id);
+
+    }
+
+    @Override
+    public Optional<Order> getByCode(Code code) {
+        return orderDao.getByCode(code);
     }
 
     @Override

@@ -3,13 +3,17 @@ package service.impl;
 import dao.ProductDao;
 import factory.ProductDaoFactory;
 import model.Product;
+import org.apache.log4j.Logger;
 import service.ProductService;
 import utils.IdGenerator;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class ProductServiceImpl implements ProductService {
+
+    private static final Logger log = Logger.getLogger(ProductServiceImpl.class);
 
     private static final ProductDao productDao = ProductDaoFactory.getInstance();
 
@@ -26,8 +30,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getById(Long id) {
-        return productDao.getById(id);
+    public Optional<Product> getById(Long id) {
+            return productDao.getById(id);
     }
 
     @Override
@@ -39,7 +43,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void removeProduct(Long id) {
-        productDao.removeProduct(productDao.getById(id));
+        if (productDao.getById(id).isPresent()) {
+            productDao.removeProduct(productDao.getById(id).get());
+        } else {
+            log.error(String.format("Failed remove product with id = '%s'. It is not exist", id));
+        }
     }
 
     private void validateProductData(String name, String description, double price)

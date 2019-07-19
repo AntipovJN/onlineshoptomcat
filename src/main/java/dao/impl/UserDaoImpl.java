@@ -5,6 +5,7 @@ import model.User;
 import service.Database;
 
 import java.util.List;
+import java.util.Optional;
 
 public class UserDaoImpl implements UserDao {
 
@@ -17,21 +18,21 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getByEmail(String email) {
+    public Optional<User> getByEmail(String email) {
         for (User user : Database.USERS) {
             if (user.getEmail().equals(email))
-                return user;
+                return Optional.of(user);
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
-    public User getById(Long id) {
+    public Optional<User> getById(Long id) {
         for (User user : Database.USERS) {
             if (user.getId().equals(id))
-                return user;
+                return Optional.of(user);
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override

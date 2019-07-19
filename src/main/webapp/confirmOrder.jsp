@@ -13,7 +13,7 @@
 <body>
     Enter authentication code from email, for confirm order
     ${error}
-    <form action="/confirm" method="post">
+    <form action="/confirmOrder" method="post">
         <input type="hidden" value="${orderId}" name="id">
         Code: <input type="text" name="code">
         <input type="submit">

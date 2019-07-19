@@ -1,9 +1,7 @@
 package factory;
 
 import dao.UserDao;
-import dao.impl.UserDaoImpl;
-import model.User;
-import utils.IdGenerator;
+import dao.impl.UserDaoJDBC;
 
 public class UserDaoFactory {
 
@@ -11,9 +9,7 @@ public class UserDaoFactory {
 
     public static synchronized UserDao getInstance() {
         if (instance == null) {
-            instance = new UserDaoImpl();
-            instance.addUser(new User(IdGenerator.getUserID(), "admin@a", "admin", "admin"));
-                instance.addUser(new User(IdGenerator.getUserID(), "antipov.jn@gmail.com", "aaa", "user"));
+            instance = new UserDaoJDBC();
         }
         return instance;
     }

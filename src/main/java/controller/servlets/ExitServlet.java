@@ -1,8 +1,5 @@
 package controller.servlets;
 
-import factory.UserServiceFactory;
-import service.UserService;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,8 +9,6 @@ import java.io.IOException;
 
 @WebServlet(value = "/exit")
 public class ExitServlet extends HttpServlet {
-
-    private static final UserService userService = UserServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -22,13 +22,18 @@ public class SignInServlet extends HttpServlet {
             throws ServletException, IOException {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-        User user = userService.getByEmail(email);
-        if (Objects.isNull(user) || !user.getPassword().equals(password)) {
+        if (userService.getByEmail(email).isPresent()) {
+            User user = userService.getByEmail(email).get();
+            if (user.getPassword().equals(password)) {
+                req.getSession().setAttribute("user", user);
+                resp.sendRedirect("/users");
+            } else {
+                req.setAttribute("error", "Incorrect login or password");
+                req.getRequestDispatcher("index.jsp").forward(req, resp);
+            }
+        } else {
             req.setAttribute("error", "Incorrect login or password");
             req.getRequestDispatcher("index.jsp").forward(req, resp);
-        } else {
-            req.getSession().setAttribute("user", user);
-            resp.sendRedirect("/users");
         }
     }
 }

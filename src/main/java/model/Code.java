@@ -18,11 +18,32 @@ public class Code {
         this.code = code;
     }
 
-    public long getUser() {
+    public long getUserId() {
         return userId;
     }
 
     public void setUser(long userId) {
         this.userId = userId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        Code code1 = (Code) o;
+
+        if (getCode() != code1.getCode())
+            return false;
+        return getUserId() == code1.getUserId();
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getCode();
+        result = 31 * result + (int) (getUserId() ^ (getUserId() >>> 32));
+        return result;
     }
 }

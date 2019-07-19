@@ -3,6 +3,7 @@ package dao;
 import model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserDao {
 
@@ -10,9 +11,9 @@ public interface UserDao {
 
     List<User> getAll();
 
-    User getByEmail(String email);
+    Optional<User> getByEmail(String email);
 
-    User getById(Long id);
+    Optional<User> getById(Long id);
 
     void updateUser(User user);
 

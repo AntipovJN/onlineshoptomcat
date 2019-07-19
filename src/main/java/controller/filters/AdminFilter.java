@@ -16,6 +16,7 @@ import java.util.Objects;
 
 @WebFilter(value = {"/users/*", "/products/add", "/products/edit"})
 public class AdminFilter implements Filter {
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 

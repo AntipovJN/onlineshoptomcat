@@ -1,10 +1,12 @@
 package dao.impl;
 
 import dao.OrderDao;
+import model.Code;
 import model.Order;
 import service.Database;
 
 import java.util.List;
+import java.util.Optional;
 
 public class OrderDaoImpl implements OrderDao {
 
@@ -14,13 +16,23 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Order getById(long id) {
+    public Optional<Order> getById(long id) {
         for (Order order : Database.ORDERS) {
             if (order.getId() == id) {
-                return order;
+                return Optional.of(order);
             }
         }
-        return null;
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Order> getByCode(Code code) {
+        for (Order order : Database.ORDERS) {
+            if (order.getCode().equals(code)) {
+                return Optional.of(order);
+            }
+        }
+        return Optional.empty();
     }
 
     @Override

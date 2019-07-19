@@ -20,12 +20,16 @@ public class EditProductServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         long id = Long.valueOf(req.getParameter("id"));
-        Product product = productService.getById(id);
-        req.setAttribute("id", id);
-        req.setAttribute("name", product.getName());
-        req.setAttribute("description", product.getDescription());
-        req.setAttribute("priceValue", product.getPrice());
-        req.getRequestDispatcher("/edit_product.jsp").forward(req, resp);
+        if (productService.getById(id).isPresent()) {
+            Product product = productService.getById(id).get();
+            req.setAttribute("id", id);
+            req.setAttribute("name", product.getName());
+            req.setAttribute("description", product.getDescription());
+            req.setAttribute("priceValue", product.getPrice());
+            req.getRequestDispatcher("/edit_product.jsp").forward(req, resp);
+        } else {
+            resp.sendRedirect("/products");
+        }
     }
 
     @Override

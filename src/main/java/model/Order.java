@@ -15,6 +15,12 @@ public class Order {
         this.code = code;
         this.listOfProducts = listOfProducts;
     }
+    public Order(String address, String payment, Code code, String listOfProducts) {
+        this.address = address;
+        this.payment = payment;
+        this.code = code;
+        this.listOfProducts = listOfProducts;
+    }
 
     public String getListOfProducts() {
         return listOfProducts;
