@@ -42,7 +42,7 @@ public class MailServiceImpl implements MailService {
                     InternetAddress.parse(email)
             );
             message.setSubject("Code of authentication");
-            message.setText(Integer.toString(code.getCode()));
+            message.setText(Integer.toString(code.getCodeValue()));
 
             Transport.send(message);
 

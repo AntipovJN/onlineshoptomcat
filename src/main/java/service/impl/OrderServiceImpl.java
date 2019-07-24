@@ -2,9 +2,9 @@ package service.impl;
 
 import dao.OrderDao;
 import factory.OrderDaoFactory;
+import model.Basket;
 import model.Code;
 import model.Order;
-import model.User;
 import service.OrderService;
 import utils.CodeGenerator;
 
@@ -17,9 +17,9 @@ public class OrderServiceImpl implements OrderService {
     private static final OrderDao orderDao = OrderDaoFactory.getInstance();
 
     @Override
-    public Code addOrder(String address, String payment, User user, String basket) {
-        Code code = new Code(CodeGenerator.generateCode(), user.getId());
-        Order order = new Order(address, payment, code, basket);
+    public Code addOrder(String address, String payment, Basket basket) {
+        Code code = new Code(CodeGenerator.generateCode(), basket.getUser());
+        Order order = new Order(address, payment, code, basket.getProducts());
         orderDao.addOrder(order);
         return code;
     }
@@ -27,7 +27,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Optional<Order> getById(long id) {
         return orderDao.getById(id);
-
     }
 
     @Override

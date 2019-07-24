@@ -3,6 +3,7 @@ package controller.servlets;
 import factory.UserServiceFactory;
 import model.User;
 import service.UserService;
+import utils.SHA256StringHashUtil;
 
 import javax.security.auth.login.LoginException;
 import javax.servlet.ServletException;
@@ -36,8 +37,8 @@ public class EditUserServlet extends HttpServlet {
             throws ServletException, IOException {
         Long id = Long.valueOf(req.getParameter("id"));
         String email = req.getParameter("email");
-        String password = req.getParameter("password");
-        String passwordAgain = req.getParameter("repeatPassword");
+        String password = SHA256StringHashUtil.getSha256(req.getParameter("password"));
+        String passwordAgain = SHA256StringHashUtil.getSha256(req.getParameter("repeatPassword"));
         try {
             userService.updateUser(id, email, password, passwordAgain);
             resp.sendRedirect("/users");

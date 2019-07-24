@@ -1,8 +1,10 @@
 package controller.servlets;
 
+import factory.BasketServiceFactory;
 import factory.OrderServiceFactory;
 import model.Code;
 import model.User;
+import service.BasketService;
 import service.OrderService;
 
 import javax.servlet.ServletException;
@@ -16,6 +18,7 @@ import java.io.IOException;
 public class AddOrderServlet extends HttpServlet {
 
     private static final OrderService orderService = OrderServiceFactory.getInstance();
+    private static final BasketService basketService = BasketServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -28,13 +31,14 @@ public class AddOrderServlet extends HttpServlet {
             throws ServletException, IOException {
         String address = req.getParameter("address");
         String payment = req.getParameter("payment");
-        Code code = orderService.addOrder(address, payment,
-                ((User) req.getSession().getAttribute("user")),
-                req.getSession().getAttribute("basket").toString());
+        User user = (User) req.getSession().getAttribute("user");
+        Code code = orderService.addOrder(address, payment, basketService.getBasket(user));
         if (orderService.getByCode(code).isPresent()) {
             Long id = orderService.getByCode(code).get().getId();
             req.getSession().setAttribute("orderId", id);
             resp.sendRedirect("/confirmOrder");
-        } else resp.sendRedirect("/products");
+            return;
+        }
+            resp.sendRedirect("/products");
     }
 }

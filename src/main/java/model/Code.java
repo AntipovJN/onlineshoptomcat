@@ -2,28 +2,28 @@ package model;
 
 public class Code {
 
-    private int code;
-    private long userId;
+    private int codeValue;
+    private User user;
 
-    public Code(int code, long userId) {
-        this.code = code;
-        this.userId = userId;
+    public Code(int code, User user) {
+        this.codeValue = code;
+        this.user = user;
     }
 
-    public int getCode() {
-        return code;
+    public int getCodeValue() {
+        return codeValue;
     }
 
-    public void setCode(int code) {
-        this.code = code;
+    public void setCodeValue(int code) {
+        this.codeValue = code;
     }
 
-    public long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUser(long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -35,15 +35,15 @@ public class Code {
 
         Code code1 = (Code) o;
 
-        if (getCode() != code1.getCode())
+        if (getCodeValue() != code1.getCodeValue())
             return false;
-        return getUserId() == code1.getUserId();
+        return getUser() != null ? getUser().equals(code1.getUser()) : code1.getUser() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getCode();
-        result = 31 * result + (int) (getUserId() ^ (getUserId() >>> 32));
+        int result = getCodeValue();
+        result = 31 * result + (getUser() != null ? getUser().hashCode() : 0);
         return result;
     }
 }

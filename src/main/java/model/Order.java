@@ -1,33 +1,50 @@
 package model;
 
+import java.util.List;
+
 public class Order {
 
     private long id;
     private String address;
     private String payment;
     private Code code;
-    private String listOfProducts;
+    private List<Product> listOfProducts;
 
-    public Order(long id, String address, String payment, Code code, String listOfProducts) {
+    public Order(long id, String address, String payment, Code code, List<Product> listOfProducts) {
         this.id = id;
         this.address = address;
         this.payment = payment;
         this.code = code;
         this.listOfProducts = listOfProducts;
     }
-    public Order(String address, String payment, Code code, String listOfProducts) {
+
+    public Order(String address, String payment, Code code, List<Product> listOfProducts) {
         this.address = address;
         this.payment = payment;
         this.code = code;
         this.listOfProducts = listOfProducts;
     }
 
-    public String getListOfProducts() {
+    public Order(String address, String payment, Code code) {
+        this.address = address;
+        this.payment = payment;
+        this.code = code;
+    }
+
+    public List<Product> getListOfProducts() {
         return listOfProducts;
 
     }
 
-    public void setListOfProducts(String listOfProducts) {
+    public String getListOfProductsString() {
+        StringBuilder sb = new StringBuilder();
+        for (Product product : getListOfProducts()) {
+            sb.append(product.getId().toString()).append(";");
+        }
+        return sb.toString();
+    }
+
+    public void setListOfProducts(List<Product> listOfProducts) {
         this.listOfProducts = listOfProducts;
     }
 
@@ -92,5 +109,16 @@ public class Order {
         result = 31 * result + (getCode() != null ? getCode().hashCode() : 0);
         result = 31 * result + (getListOfProducts() != null ? getListOfProducts().hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", address='" + address + '\'' +
+                ", payment='" + payment + '\'' +
+                ", code=" + code +
+                ", listOfProducts=" + listOfProducts +
+                '}';
     }
 }

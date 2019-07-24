@@ -1,4 +1,4 @@
-package dao.impl;
+package dao.impl.JDBC;
 
 import dao.ProductDao;
 import model.Product;
@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import utils.ConnectionJDBC;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,8 +22,9 @@ public class ProductDaoJDBC implements ProductDao {
     public List<Product> getAll() {
         List<Product> productList = new LinkedList<>();
         try (Connection connection = ConnectionJDBC.getConnection()) {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM prodycts_test");
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM prodycts_test");
+            ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 productList.add(new Product(resultSet.getLong("id"),
                         resultSet.getString("name"),
@@ -38,10 +40,12 @@ public class ProductDaoJDBC implements ProductDao {
     @Override
     public void addProduct(Product product) {
         try (Connection connection = ConnectionJDBC.getConnection()) {
-            Statement statement = connection.createStatement();
-            statement.execute(String.format(
-                    "INSERT INTO prodycts_test (name, description, price) VALUES ('%s','%s','%s')",
-                    product.getName(), product.getDescription(), product.getPrice()));
+            PreparedStatement statement = connection.prepareStatement(
+                    "INSERT INTO prodycts_test (name, description, price) VALUES (?,?,?)");
+            statement.setString(1, product.getName());
+            statement.setString(2, product.getDescription());
+            statement.setDouble(3, product.getPrice());
+            statement.execute();
             logger.info(String.format("Added new product with name = %s",product.getName()));
         } catch (SQLException e) {
             logger.error("Failed adding new product to DB", e);
@@ -51,9 +55,10 @@ public class ProductDaoJDBC implements ProductDao {
     @Override
     public Optional<Product> getById(long id) {
         try (Connection connection = ConnectionJDBC.getConnection()) {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(
-                    String.format("SELECT * FROM prodycts_test WHERE id='%s'", id));
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM prodycts_test WHERE id=?");
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             return Optional.of(new Product(resultSet.getLong("id"),
                     resultSet.getString("name"),
@@ -68,11 +73,13 @@ public class ProductDaoJDBC implements ProductDao {
     @Override
     public void updateProduct(Product product) {
         try (Connection connection = ConnectionJDBC.getConnection()) {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(String.format(
-                    "UPDATE prodycts_test SET name='%s', description='%s', price='%s' WHERE id='%s'",
-                    product.getName(), product.getDescription(),
-                    product.getPrice(), product.getId()));
+            PreparedStatement statement = connection.prepareStatement(
+                    "UPDATE prodycts_test SET name=?, description=?, price=? WHERE id=?");
+            statement.setString(1, product.getName());
+            statement.setString(2, product.getDescription());
+            statement.setDouble(3, product.getPrice());
+            statement.setLong(4, product.getId());
+            statement.executeUpdate();
             logger.info(String.format("Updated new product with id = %s", product.getId()));
         } catch (SQLException e) {
             logger.error(String.format("Failed updating product with id = %s", product.getId()), e);
@@ -82,11 +89,12 @@ public class ProductDaoJDBC implements ProductDao {
     @Override
     public void removeProduct(Product product) {
         try (Connection connection = ConnectionJDBC.getConnection()) {
-            Statement statement = connection.createStatement();
-            statement.execute(String.format(
-                    "DELETE FROM prodycts_test WHERE id='%s'", product.getId()));
+            PreparedStatement statement = connection.prepareStatement(
+                    "DELETE FROM prodycts_test WHERE id=?");
+            statement.setLong(1, product.getId());
+            statement.execute();
             logger.info(String.format("Deleted new product with id = %s", product.getId()));
-    } catch (SQLException e) {
+        } catch (SQLException e) {
             logger.error(String.format("Failed removing product with id = %s", product.getId()), e);
         }
     }

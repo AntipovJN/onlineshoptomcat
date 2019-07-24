@@ -1,4 +1,4 @@
-package dao.impl;
+package dao.impl.JDBC;
 
 import dao.UserDao;
 import model.User;
@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import utils.ConnectionJDBC;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,11 +21,14 @@ public class UserDaoJDBC implements UserDao {
     @Override
     public void addUser(User user) {
         try (Connection connection = ConnectionJDBC.getConnection()) {
-            Statement statement = connection.createStatement();
-            statement.execute(String.format("INSERT INTO users_test (email, password, role)"
-                            + " VALUES ('%s','%s','%s')"
-                    , user.getEmail(), user.getPassword(), user.getRole()));
-            logger.info(String.format("Added new user with email = %s",user.getEmail()));
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "INSERT INTO users_test (email, password, role)"
+                            + " VALUES (?,?,?)");
+            preparedStatement.setString(1, user.getEmail());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, user.getRole());
+            preparedStatement.execute();
+            logger.info(String.format("Added new user with email = %s", user.getEmail()));
         } catch (SQLException e) {
             logger.error(String.format("Failed adding user with email = %s", user.getEmail()), e);
         }
@@ -33,10 +37,10 @@ public class UserDaoJDBC implements UserDao {
     @Override
     public List<User> getAll() {
         List<User> userList = new LinkedList<>();
-
         try (Connection connection = ConnectionJDBC.getConnection()) {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM users_test");
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM users_test");
+            ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 userList.add(new User(resultSet.getLong("id"),
                         resultSet.getString("email"),
@@ -52,9 +56,10 @@ public class UserDaoJDBC implements UserDao {
     @Override
     public Optional<User> getByEmail(String email) {
         try (Connection connection = ConnectionJDBC.getConnection()) {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(
-                    String.format("SELECT * FROM users_test WHERE email='%s'", email));
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM users_test WHERE email=?");
+            statement.setString(1, email);
+            ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             return Optional.of(new User(resultSet.getLong("id"),
                     resultSet.getString("email"),
@@ -69,9 +74,10 @@ public class UserDaoJDBC implements UserDao {
     @Override
     public Optional<User> getById(Long id) {
         try (Connection connection = ConnectionJDBC.getConnection()) {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(
-                    String.format("SELECT * FROM users_test WHERE id='%s'", id));
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM users_test WHERE id=?");
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             return Optional.of(new User(resultSet.getLong("id"),
                     resultSet.getString("email"),
@@ -86,10 +92,13 @@ public class UserDaoJDBC implements UserDao {
     @Override
     public void updateUser(User user) {
         try (Connection connection = ConnectionJDBC.getConnection()) {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(String.format(
-                    "UPDATE users_test SET email='%s', password='%s', role='%s' WHERE id='%s'",
-                    user.getEmail(), user.getPassword(), user.getRole(), user.getId()));
+            PreparedStatement statement = connection.prepareStatement(
+                    "UPDATE users_test SET email=?, password=?, role=? WHERE id=?");
+            statement.setString(1, user.getEmail());
+            statement.setString(2, user.getPassword());
+            statement.setString(3, user.getRole());
+            statement.setLong(4, user.getId());
+            statement.executeUpdate();
             logger.info(String.format("Updated user with id = %s", user.getId()));
         } catch (SQLException e) {
             logger.error(String.format("Failed updating product with id = '%s'", user.getId()), e);
@@ -99,9 +108,10 @@ public class UserDaoJDBC implements UserDao {
     @Override
     public void removeUser(User user) {
         try (Connection connection = ConnectionJDBC.getConnection()) {
-            Statement statement = connection.createStatement();
-            statement.execute(String.format(
-                    "DELETE FROM users_test WHERE id='%s'", user.getId()));
+            PreparedStatement statement = connection.prepareStatement(
+                    "DELETE FROM users_test WHERE id=?");
+            statement.setLong(1, user.getId());
+            statement.execute();
             logger.info(String.format("Deleted user with id = %s", user.getId()));
         } catch (SQLException e) {
             logger.error(String.format("Failed removing product with id = '%s'", user.getId()), e);

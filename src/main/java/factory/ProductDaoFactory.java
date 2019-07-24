@@ -1,7 +1,7 @@
 package factory;
 
 import dao.ProductDao;
-import dao.impl.ProductDaoJDBC;
+import dao.impl.JDBC.ProductDaoJDBC;
 
 public class ProductDaoFactory {
 

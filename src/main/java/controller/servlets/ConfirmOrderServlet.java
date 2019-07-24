@@ -1,9 +1,11 @@
 package controller.servlets;
 
+import factory.BasketServiceFactory;
 import factory.MailServiceFactory;
 import factory.OrderServiceFactory;
 import model.Order;
 import model.User;
+import service.BasketService;
 import service.MailService;
 import service.OrderService;
 
@@ -18,13 +20,14 @@ import java.io.IOException;
 public class ConfirmOrderServlet extends HttpServlet {
 
     private static final OrderService orderService = OrderServiceFactory.getInstance();
+    private static final BasketService basket_service = BasketServiceFactory.getInstance();
     private static final MailService mailService = MailServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         long id = Long.valueOf(req.getSession().getAttribute("orderId").toString());
-        req.getSession().removeAttribute("orderId3");
+        req.getSession().removeAttribute("orderId");
         req.setAttribute("orderId", id);
         User user = (User) req.getSession().getAttribute("user");
         if (orderService.getById(id).isPresent()) {
@@ -41,11 +44,11 @@ public class ConfirmOrderServlet extends HttpServlet {
             throws ServletException, IOException {
         long id = Long.valueOf(req.getParameter("id"));
         int code = Integer.valueOf(req.getParameter("code"));
-        if (code != orderService.getById(id).get().getCode().getCode()) {
+        if (code != orderService.getById(id).get().getCode().getCodeValue()) {
             req.setAttribute("error", "invalid code");
             req.getRequestDispatcher("/confirmOrder.jsp").forward(req, resp);
         } else {
-            req.getSession().removeAttribute("basket");
+            basket_service.removeProduct((User) req.getSession().getAttribute("user"));
             resp.sendRedirect("/products");
         }
     }

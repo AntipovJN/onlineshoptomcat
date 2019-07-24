@@ -1,4 +1,4 @@
-package dao.impl;
+package dao.impl.localStorage;
 
 import dao.ProductDao;
 import model.Product;

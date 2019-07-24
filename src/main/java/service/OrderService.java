@@ -1,15 +1,15 @@
 package service;
 
+import model.Basket;
 import model.Code;
 import model.Order;
-import model.User;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface OrderService {
 
-    Code addOrder(String address, String payment, User user, String basket);
+    Code addOrder(String address, String payment, Basket basket);
 
     Optional<Order> getById(long id);
 

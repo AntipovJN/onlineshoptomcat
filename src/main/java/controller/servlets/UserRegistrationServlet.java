@@ -2,6 +2,7 @@ package controller.servlets;
 
 import factory.UserServiceFactory;
 import service.UserService;
+import utils.SHA256StringHashUtil;
 
 import javax.security.auth.login.LoginException;
 import javax.servlet.ServletException;
@@ -26,8 +27,8 @@ public class UserRegistrationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String email = req.getParameter("email");
-        String password = req.getParameter("password");
-        String repeatPassword = req.getParameter("repeatPassword");
+        String password = SHA256StringHashUtil.getSha256(req.getParameter("password"));
+        String repeatPassword = SHA256StringHashUtil.getSha256(req.getParameter("repeatPassword"));
         String role = req.getParameter("role");
         try {
             userService.addUser(email, password, repeatPassword, role);
