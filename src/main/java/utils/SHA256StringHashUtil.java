@@ -14,7 +14,7 @@ public class SHA256StringHashUtil {
             messageDigest.update(value.getBytes());
             return bytesToHex(messageDigest.digest());
         } catch (Exception ex) {
-            logger.error("", ex);
+            logger.error("Hashing error", ex);
             throw new RuntimeException(ex);
         }
     }
