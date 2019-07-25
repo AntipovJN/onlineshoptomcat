@@ -11,7 +11,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,8 +42,8 @@ public class OrderDaoJDBC implements OrderDao {
     public Optional<Order> getById(long id) {
         try (Connection connection = ConnectionJDBC.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT order_test.id, address, payment, code, products, userid, email, password, role"
-                            + " FROM order_test INNER JOIN users_test ON userid = users_test.id"
+                    "SELECT order_test.id, address, payment, code, products, user_id, email, password, role"
+                            + " FROM order_test INNER JOIN users_test ON user_id = users_test.id"
                             + " WHERE order_test.id=?");
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
@@ -59,15 +58,15 @@ public class OrderDaoJDBC implements OrderDao {
     public Optional<Order> getByCode(Code code) {
         try (Connection connection = ConnectionJDBC.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT order_test.id, address, payment, code, products, userid, email, password, role "
+                    "SELECT order_test.id, address, payment, code, products, user_id, email, password, role "
                             + "FROM order_test INNER JOIN users_test "
-                            + "ON userid = users_test.id WHERE code=? AND userid=?");
+                            + "ON user_id = users_test.id WHERE code=? AND user_id=?");
             statement.setString(1, Integer.toString(code.getCodeValue()));
             statement.setLong(2, code.getUser().getId());
             ResultSet resultSet = statement.executeQuery();
             return getOrderFromResultset(resultSet);
         } catch (SQLException e) {
-            logger.error(String.format("Failed getting order where userid='%s'",
+            logger.error(String.format("Failed getting order where userid='%d'",
                     code.getUser().getId()), e);
         }
         return Optional.empty();
@@ -78,8 +77,8 @@ public class OrderDaoJDBC implements OrderDao {
         List<Order> orders = new ArrayList<>();
         try (Connection connection = ConnectionJDBC.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT id, address, payment, code, products, userid, email, password, role"
-                            + " FROM order_test INNER JOIN users_test ON userid = users_test.id");
+                    "SELECT id, address, payment, code, products, user_id, email, password, role"
+                            + " FROM order_test INNER JOIN users_test ON user_id = users_test.id");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 if (getOrderFromResultset(resultSet).isPresent()) {
@@ -97,7 +96,7 @@ public class OrderDaoJDBC implements OrderDao {
         try (Connection connection = ConnectionJDBC.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(
                     "UPDATE order_test SET address=?, payment=?,"
-                            + " code=? , products=?, userid=? WHERE id=?");
+                            + " code=? , products=?, user_id=? WHERE id=?");
             statement.setString(1, order.getAddress());
             statement.setString(2, order.getPayment());
             statement.setInt(3, order.getCode().getCodeValue());
@@ -123,23 +122,19 @@ public class OrderDaoJDBC implements OrderDao {
         }
     }
 
-    private Optional<Order> getOrderFromResultset(ResultSet resultSet) {
-        try {
+    private Optional<Order> getOrderFromResultset(ResultSet resultSet) throws SQLException {
             if (resultSet.next()) {
                 Order order = new Order(
                         resultSet.getString("address"),
                         resultSet.getString("payment"),
                         new Code(Integer.valueOf(resultSet.getString("code")),
-                                new User(resultSet.getLong("userid"),
+                                new User(resultSet.getLong("user_id"),
                                         resultSet.getString("email"),
                                         resultSet.getString("password"),
                                         resultSet.getString("role"))));
                 order.setId(resultSet.getLong("id"));
                 return Optional.of(order);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         return Optional.empty();
     }
 
