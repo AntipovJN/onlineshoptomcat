@@ -1,4 +1,4 @@
-package controller;
+package controller.servlets;
 
 import model.User;
 import service.UserService;
@@ -21,13 +21,7 @@ public class AllUserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         List<User> allUsers = userService.getAll();
-        req.setAttribute("allUsers", allUsers);
+        req.setAttribute("users", allUsers);
         req.getRequestDispatcher("users.jsp").forward(req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        doGet(req, resp);
     }
 }

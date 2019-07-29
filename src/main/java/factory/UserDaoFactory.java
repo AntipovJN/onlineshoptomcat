@@ -1,7 +1,7 @@
 package factory;
 
 import dao.UserDao;
-import dao.impl.UserDaoImpl;
+import dao.impl.JDBC.UserDaoJDBC;
 
 public class UserDaoFactory {
 
@@ -9,7 +9,7 @@ public class UserDaoFactory {
 
     public static synchronized UserDao getInstance() {
         if (instance == null) {
-            instance = new UserDaoImpl();
+            instance = new UserDaoJDBC();
         }
         return instance;
     }

@@ -1,15 +1,27 @@
 package model;
 
+import javax.persistence.Entity;
+
+@Entity
+
 public class User {
 
     private Long id;
     private String email;
     private String password;
+    private String role;
 
-    public User(Long id, String email, String password) {
+    public User(Long id, String email, String password, String role) {
         this.id = id;
         this.email = email;
         this.password = password;
+        this.role = role;
+    }
+
+    public User(String email, String password, String role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
     }
 
     public Long getId() {
@@ -36,6 +48,13 @@ public class User {
         this.password = password;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

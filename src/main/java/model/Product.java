@@ -13,6 +13,11 @@ public class Product {
         this.description = descriptional;
         this.price = price;
     }
+    public Product (String name, String descriptional, double price) {
+        this.name = name;
+        this.description = descriptional;
+        this.price = price;
+    }
 
     public Long getId() {
         return id;
@@ -69,5 +74,15 @@ public class Product {
         temp = Double.doubleToLongBits(getPrice());
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                '}';
     }
 }

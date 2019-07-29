@@ -1,10 +1,11 @@
-package controller;
+package controller.servlets;
 
-    import factory.UserServiceFactory;
-    import model.User;
-    import service.UserService;
+import factory.UserServiceFactory;
+import service.UserService;
+import utils.SHA256StringHashUtil;
 
-    import javax.servlet.ServletException;
+import javax.security.auth.login.LoginException;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +17,6 @@ public class UserRegistrationServlet extends HttpServlet {
 
     private static final UserService userService = UserServiceFactory.getInstance();
 
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -27,19 +27,19 @@ public class UserRegistrationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String email = req.getParameter("email");
-        String password = req.getParameter("password");
-        String repeatPassword = req.getParameter("repeatPassword");
-        if (password.equals(repeatPassword)) {
-            User user = new User(1L, email, password);
-            userService.addUser(user);
-            req.getSession().setAttribute("user",user);
+        String password = SHA256StringHashUtil.getSha256(req.getParameter("password"));
+        String repeatPassword = SHA256StringHashUtil.getSha256(req.getParameter("repeatPassword"));
+        String role = req.getParameter("role");
+        try {
+            userService.addUser(email, password, repeatPassword, role);
             resp.sendRedirect("/users");
-        } else {
-            req.setAttribute("email",email);
-            req.setAttribute("error", "Your passwords not equals");
+        } catch (IllegalArgumentException e) {
+            req.setAttribute("error", e.getMessage());
+            req.setAttribute("email", email);
+            req.getRequestDispatcher("register.jsp").forward(req, resp);
+        } catch (LoginException e) {
+            req.setAttribute("error", e.getMessage());
             req.getRequestDispatcher("register.jsp").forward(req, resp);
         }
-
     }
-
 }
